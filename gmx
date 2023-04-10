@@ -1,0 +1,26 @@
+conda activate gmxMMPBSA_fly
+gmx pdb2gmx -f 7u0n_gmx.pdb -o 7u0n_processed.gro -water tip3p
+#pick 1
+#water box, solvate
+gmx editconf -f 7u0n_processed.gro -o 7u0n_newbox.gro -bt dodecahedron -d 1.0
+gmx solvate -cp 7u0n_newbox.gro -cs spc216.gro -o solv.gro -p topol.top
+#引入ions.mdp，PME or cutoff
+gmx grompp -f ions.mdp -c solv.gro -p topol.top -o ions.tpr
+gmx genion -s ions.tpr -o solv_ions.gro -p topol.top -pname NA -nname CL -neutral
+#pick 13 ions
+#energy minimization, important! otherwise the result is not valid
+gmx grompp -f minim.mdp -c 1AKI_solv_ions.gro -p topol.top -o em.tpr
+gmx mdrun -v -deffnm em
+# Epot should be negative, and (for a simple protein in water) on the order of 10^5-10^6,Fmax < 1000 kJ mol-1 nm-1.
+#It is possible to arrive at a reasonable Epot with Fmax > emtol,system may not be stable enough for simulation.
+#Equilibrium nvt 200ps
+gmx grompp -f nvt.mdp -c em.gro -r em.gro -p topol.top -o nvt.tpr
+gmx mdrun -deffnm nvt
+#npt Equilibrium
+gmx grompp -f npt.mdp -c nvt.gro -r nvt.gro -t nvt.cpt -p topol.top -o npt.tpr
+
+#run gromacs
+gmx grompp -f md.mdp -c npt.gro -t npt.cpt -p topol.top -o md_0_10.tpr
+
+gmx mdrun -deffnm md_0_10
+
