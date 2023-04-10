@@ -1,0 +1,10 @@
+#activate environment
+source /home/lhlai_pkuhpc/lustre2/fhwang/RFDiffusion_test/RFdiffusion/RFdiffusion/RFenv.sh
+#example 
+run_inference.py 'contigmap.contigs=[100-100/0 20-20]' 'contigmap.provide_seq=[100-119]' diffuser.partial_T=10
+#设计序列
+conda activate dl_binder_design
+#example
+../scripts/run_inference.py inference.output_prefix=example_outputs/design_ppi inference.input_pdb=input_pdbs/insulin_target.pdb 'contigmap.contigs=[A1-150/0 70-100]' 'ppi.hotspot_res=[A59,A83,A91]' inference.num_designs=10 denoiser.noise_scale_ca=0 denoiser.noise_scale_frame=0
+#modified
+run_inference.py inference.input_pdb=7u0n_gmx.pdb 'contigmap.contigs=[A19-614/0 50-100]' 'ppi.hotspot_res=[A28,A83,A24,A31,A34,A23]' inference.num_designs=1 denoiser.noise_scale_ca=0 denoiser.noise_scale_frame=0
