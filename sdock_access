@@ -1,0 +1,16 @@
+tar -zxf Ddock_0411.tar.gz
+for i in $(ls *_script.sh);do mkdir ${i%_script.sh};mv ${i%_script.sh}D* ${i%_script.sh};done
+sed -i 'Nd' filename #178：3n7s
+
+#!/bin/bash
+#SBATCH -J dffusion
+#SBATCH -p gpu_4l
+#SBATCH -N 1
+#SBATCH -o binder1.out
+#SBATCH -e binder1.err
+#SBATCH --no-requeue
+#SBATCH -A lhlai_g1
+#SBATCH --qos=lhlaig4c
+#SBATCH --gres=gpu:1
+#SBATCH --exclusive
+./scripts/run_inference.py inference.input_pdb=7u0n_gmx.pdb 'contigmap.contigs=[A19-614/0 50-100]' 'ppi.hotspot_res=[A28,A83,A24,A31,A34,A23]' inference.num_designs=200 denoiser.noise_scale_ca=0 denoiser.noise_scale_frame=0
