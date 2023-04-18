@@ -1,1 +1,13 @@
+#pandas dataframe
+#一次性merge多个pd
+all = pd.concat(data)
+#条件筛选
+rmldfil = all_result[(all_result['rmsd']<5) & (all_result['lddt']>70)]
+#提取description
+pdb213 = fil213.loc[:,['description']]
 
+#提取linux中每一行作为变量
+cat mycontent.txt |while read rows;do echo "Line contents are : $rows";done
+
+#windows 和 linux 换行处理
+sed -i -e 's/\r$//' scriptname.sh
