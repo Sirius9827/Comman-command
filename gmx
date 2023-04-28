@@ -24,3 +24,27 @@ gmx grompp -f md.mdp -c npt.gro -t npt.cpt -p topol.top -o md_0_10.tpr
 
 gmx mdrun -deffnm md_0_10
 
+mmpbsa analysis
+1、创建ndx文件
+gmx make_ndx -f md.gro -o index.ndx
+进入选择界面
+按一下enter，出现所有的组
+splitch 1
+按一下enter，新出现的两个组分别代表两条链
+chain1id&a CA
+选择第一条链中的CA原子
+chain2id&a CA
+选择第二条链中的CA
+再按enter，新出现的组分别是两条链的CA，最后算rmsd的时候用到
+
+2、处理轨迹（当时我调试了很久，下面的protocol是成功把蛋白放在盒子里的）
+gmx trjconv -f md_1.xtc -o md_nojump.xtc -s md.tpr -pbc nojump
+gmx trjconv -f md_nojump.xtc -o mono28_%s_E2P.xtc -s md.tpr -center
+no jump是让跳出边界条件的蛋白回来，然后再center
+
+3、计算rmsd
+gmx rms -n index.ndx -s md.tpr -f mono28_%s_E2P.xtc -o rmsd_%s_E2P.xvg -tu ns
+第一个选项fit选靶标id，第二个选计算的部分选ligand id
+
+计算mmpbsa
+pkurun-cnnl 1 28 gmx_MMPBSA -O -i mmpbsa.in -cs ../md.tpr -ci ../index.ndx -cg 20 19 -ct ../mono35_%s.xtc -cp ../topol.top -o mono35_%s.dat -eo mono35_%s.csv -nogui
