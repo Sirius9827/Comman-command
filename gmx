@@ -25,6 +25,8 @@ gmx mdrun -deffnm npt
 gmx grompp -f md.mdp -c npt.gro -t npt.cpt -p topol.top -o md.tpr
 
 gmx mdrun -deffnm md
+pkurun-cnnl 1 28 gmx mdrun -deffnm md
+pkurun-g4c 1 1 gmx mdrun -deffnm md
 
 mmpbsa analysis
 1、创建ndx文件
