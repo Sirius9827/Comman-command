@@ -1,16 +1,18 @@
+source /home/lhlai_pkuhpc/lustre1/dengb/source_plumed.sh
 conda activate gmxMMPBSA_fly
-gmx pdb2gmx -f 7u0n_gmx.pdb -o 7u0n_processed.gro -water tip3p
+gmx pdb2gmx -f 7u0n_gmx.pdb -o processed.gro -water tip3p
 #pick 1
 #water box, solvate
-gmx editconf -f 7u0n_processed.gro -o 7u0n_newbox.gro -bt dodecahedron -d 1.0
-gmx solvate -cp 7u0n_newbox.gro -cs spc216.gro -o solv.gro -p topol.top
+gmx editconf -f processed.gro -o newbox.gro -bt dodecahedron -d 1.0
+gmx solvate -cp newbox.gro -cs spc216.gro -o solv.gro -p topol.top
 #引入ions.mdp，PME or cutoff
 gmx grompp -f ions.mdp -c solv.gro -p topol.top -o ions.tpr
 gmx genion -s ions.tpr -o solv_ions.gro -p topol.top -pname NA -nname CL -neutral
 #pick 13 ions
 #energy minimization, important! otherwise the result is not valid
-gmx grompp -f minim.mdp -c 1AKI_solv_ions.gro -p topol.top -o em.tpr
+gmx grompp -f em.mdp -c solv_ions.gro -p topol.top -o em.tpr
 gmx mdrun -v -deffnm em
+gmx mdrun -dd 7 2 1 -deffnm em
 # Epot should be negative, and (for a simple protein in water) on the order of 10^5-10^6,Fmax < 1000 kJ mol-1 nm-1.
 #It is possible to arrive at a reasonable Epot with Fmax > emtol,system may not be stable enough for simulation.
 #Equilibrium nvt 200ps
