@@ -20,11 +20,11 @@ gmx grompp -f nvt.mdp -c em.gro -r em.gro -p topol.top -o nvt.tpr
 gmx mdrun -deffnm nvt
 #npt Equilibrium
 gmx grompp -f npt.mdp -c nvt.gro -r nvt.gro -t nvt.cpt -p topol.top -o npt.tpr
-
+gmx mdrun -deffnm npt
 #run gromacs
-gmx grompp -f md.mdp -c npt.gro -t npt.cpt -p topol.top -o md_0_10.tpr
+gmx grompp -f md.mdp -c npt.gro -t npt.cpt -p topol.top -o md.tpr
 
-gmx mdrun -deffnm md_0_10
+gmx mdrun -deffnm md
 
 mmpbsa analysis
 1、创建ndx文件
