@@ -28,9 +28,11 @@ gmx mdrun -deffnm md
 pkurun-cnnl 1 28 gmx mdrun -deffnm md
 pkurun-g4c 1 1 gmx mdrun -deffnm md
 
+gmx check -f md.trr
+
 mmpbsa analysis
 1、创建ndx文件
-gmx make_ndx -f md.gro -o index.ndx
+gmx make_ndx -f npt.gro -o index.ndx
 进入选择界面
 按一下enter，出现所有的组
 splitch 1
@@ -42,13 +44,18 @@ chain2id&a CA
 再按enter，新出现的组分别是两条链的CA，最后算rmsd的时候用到
 
 2、处理轨迹（当时我调试了很久，下面的protocol是成功把蛋白放在盒子里的）
-gmx trjconv -f md_1.xtc -o md_nojump.xtc -s md.tpr -pbc nojump
-gmx trjconv -f md_nojump.xtc -o mono28_%s_E2P.xtc -s md.tpr -center
-no jump是让跳出边界条件的蛋白回来，然后再center
+gmx trjconv -f md.trr -o md_nojump.xtc -s md.tpr -pbc nojump
+#Select group for output:选择group 1 protein
+gmx trjconv -f md_nojump.xtc -o md_mono.xtc -s md.tpr -center -n index.ndx
+no jump是让跳出边界条件的蛋白回来，然后再center 
+#select group 4 backbone for centering, select group 1 protein for output
+
 
 3、计算rmsd
-gmx rms -n index.ndx -s md.tpr -f mono28_%s_E2P.xtc -o rmsd_%s_E2P.xvg -tu ns
+gmx rms -n index.ndx -s md.tpr -f md_mono.xtc -o rmsd.xvg -tu ns
 第一个选项fit选靶标id，第二个选计算的部分选ligand id
+# 输出pdb到pymol中查看轨迹 -dt需要计算时间间隔
+gmx trjconv -s md.tpr -f md_mono.xtc -o complex.pdb -dt 200 -n index.ndx
 
 计算mmpbsa
-pkurun-cnnl 1 28 gmx_MMPBSA -O -i mmpbsa.in -cs ../md.tpr -ci ../index.ndx -cg 20 19 -ct ../mono35_%s.xtc -cp ../topol.top -o mono35_%s.dat -eo mono35_%s.csv -nogui
+pkurun-cnnl 1 28 gmx_MMPBSA -O -i mmpbsa.in -cs ../md.tpr -ci ../index.ndx -cg 18 19 -ct ../mono35_%s.xtc -cp ../topol.top -o mono35_%s.dat -eo mono35_%s.csv -nogui
