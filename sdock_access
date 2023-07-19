@@ -14,3 +14,15 @@ sed -i 'Nd' filename #178：3n7s
 #SBATCH --gres=gpu:1
 #SBATCH --exclusive
 ./scripts/run_inference.py inference.input_pdb=7u0n_gmx.pdb 'contigmap.contigs=[A19-614/0 50-100]' 'ppi.hotspot_res=[A28,A83,A24,A31,A34,A23]' inference.num_designs=200 denoiser.noise_scale_ca=0 denoiser.noise_scale_frame=0
+
+#selecting cyclo_peptides with sequence less than 12
+num=$(pdb2fasta SSBCYCLIB/ss_12asA_0001_1l1lA_0001.pdb | awk 'NR == 1' | awk {'print $2'}); echo $num
+if [ $num>12 ]; then echo "the sequence is abondoned";fi
+CYCLOOPLIB_sele
+
+#!/bin/bash
+for i in $(ls CYCLOOPLIB)
+do
+num=$(pdb2fasta CYCLOOPLIB/${i} | awk 'NR == 1' | awk {'print $2'})
+if [ $num<12 ]; then cp CYCLOOPLIB/${i} CYCLOOPLIB_sele/${i};fi
+done
