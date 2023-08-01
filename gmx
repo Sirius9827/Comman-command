@@ -58,4 +58,4 @@ gmx rms -n index.ndx -s md.tpr -f md_mono.xtc -o rmsd.xvg -tu ns
 gmx trjconv -s md.tpr -f md_mono.xtc -o complex.pdb -dt 200 -n index.ndx
 
 计算mmpbsa
-pkurun-cnnl 1 28 gmx_MMPBSA -O -i mmpbsa.in -cs ../md.tpr -ci ../index.ndx -cg 18 19 -ct ../mono35_%s.xtc -cp ../topol.top -o mono35_%s.dat -eo mono35_%s.csv -nogui
+pkurun-cnnl 1 28 gmx_MMPBSA -O -i mmpbsa.in -cs ../nvt.tpr -ci ../index.ndx -cg 18 19 -ct ../sys_center1.xtc -cp ../topol.top -o sys_ener.dat -eo sys_ener.csv -nogui
