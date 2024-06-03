@@ -2,6 +2,7 @@ source /appsnew/source/gromacs2024.1-cuda12.3.sh
 #source /home/lhlai_pkuhpc/lustre1/dengb/source_plumed.sh
 #conda activate gmxMMPBSA_fly
 source activate gmxMMPBSA_2023.8  #gmxmmpbsa更新版本
+source /appsnew/source/intel2019.sh
 
 gmx pdb2gmx -f M6.pdb -o processed.gro -water tip3p
 #pick 1
