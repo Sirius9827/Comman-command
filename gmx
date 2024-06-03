@@ -71,4 +71,4 @@ gmx trjconv -s md.tpr -f md_mono.xtc -o complex.pdb -dt 200 -n index.ndx
 pkurun-cnnl 1 28 gmx_MMPBSA -O -i mmpbsa.in -cs ../nvt.tpr -ci ../index.ndx -cg 18 19 -ct ../mdls.xtc -cp ../topol.top -o sys_ener.dat -eo sys_ener.csv -nogui
 
 #Performing Alanine_scan
-gmx_MMPBSA -O -i ala_scan.in -cs .tpr -ci index.ndx -cg 17 18 -ct .xtc -cp topol.top -o FINAL_RESULTS_MMPBSA.dat -eo FINAL_RESULTS_MMPBSA.csv
+gmx_MMPBSA -O -i ala_scan.in -cs md.tpr -ci index.ndx -cg 18 17 -ct md.trr -cp topol.top -o FINAL_RESULTS_MMPBSA.dat -eo FINAL_RESULTS_MMPBSA.csv
