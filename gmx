@@ -55,6 +55,7 @@ gmx trjconv -f mdnojump.xtc -o sys_center.xtc -s nvt.tpr -center -n index.ndx
 gmx trjconv -f sys_center.xtc -s nvt.tpr -fit rot+trans -o mdfit.xtc -n index.ndx
 no jump是让跳出边界条件的蛋白回来，然后再center 
 #select group 4 backbone for centering, select group 1 protein for output
+选了Chain1 id的backbone
 
 #轨迹抽帧处理，对于300ns的模拟，60*25=1500帧，
 gmx trjconv -f input.xtc -o output.xtc -dt 3000
